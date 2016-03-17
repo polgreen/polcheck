@@ -33,8 +33,6 @@ void statmodelcheck()
     prob = (float)p/((float)p+(float)f);
     std::cout<< "Property is satisfied with probability " << prob <<"\nNumber of strings satisfying property is " << p << "\nNumber of strings failing property is "<<f <<"\n";
     
-
-
 }
 
 tracet gettrace(std::default_random_engine &generator)
@@ -50,9 +48,10 @@ tracet gettrace(std::default_random_engine &generator)
 		switch(state)
 		{	
 			case 0: state  = distribution(generator); break;
-            case 1: state = distribution(generator)+ 1;break;
-            case 2: state = distribution(generator)+2; break;
-            case 3: break;
+            case 1: state = distribution(generator)+ 1 ;break;
+            case 2: state = distribution(generator)+3; break;
+            case 3: state = 0; break;
+            case 4: break;
 			default: assert(0); //unexpected state
 		}
 		trace.push_back(state);
@@ -62,9 +61,8 @@ tracet gettrace(std::default_random_engine &generator)
 
 resultt checkproperty(tracet trace)
 {
-    //property = (true U<4 "state2"), i.e., reach state 3 within 4 steps.
-    std::vector<unsigned>::iterator it = std::find(trace.begin(), trace.end(), 3);
-    
+    //property = (true U<4 "state3"), i.e., reach state 3 within 4 steps.
+   /* std::vector<unsigned>::iterator it = std::find(trace.begin(), trace.end(), 3);
     if(it == trace.end())
     {
         std::cout << "Property not satisfied, did not reach state 2 \n";
@@ -79,6 +77,31 @@ resultt checkproperty(tracet trace)
     {
         std::cout<<"Property not satisfied, reached state 2 in position "<< *it << "\n";
         return FAIL;
+    }
+    */
+    
+    //property = (!s4 U s3)
+        std::vector<unsigned>::iterator s3 = std::find(trace.begin(), trace.end(), 3);
+        std::vector<unsigned>::iterator s4 = std::find(trace.begin(), trace.end(), 4);
+    
+    if(s3 == trace.end())
+    {
+        std::cout<< "String is neither a counterexample or a witness \n";
+        return UNKNOWN;
+    }
+    else if (*s3>*s4)
+    {
+        std::cout<<"Reached S3 in " <<*s3<<" steps and s4 in " << *s4 << " steps , string is a counterexample \n";
+        return FAIL;
+    }
+    else if (*s3 < *s4)
+    {
+        std::cout<<"Reached S3 in " <<*s3<<" steps and s4 in " << *s4 << " steps , string is a witness \n";
+        return PASS;
+    }
+    else
+    {
+        std::cout<<"Something has gone wrong: reached S3 in " <<*s3<<" steps and s4 in " << *s4 << " steps ";
     }
 	
 }

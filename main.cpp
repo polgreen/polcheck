@@ -3,6 +3,7 @@
 #include <random>
 #include <algorithm>
 #include <iostream>
+#include "pctl_tokenizer.h"
 
 typedef std::vector<unsigned> tracet; 
 enum resultt {UNKNOWN, PASS, FAIL};
@@ -47,12 +48,14 @@ tracet gettrace(std::default_random_engine &generator)
 		std::uniform_int_distribution<int> distribution(0,1);
 		switch(state)
 		{	
-			case 0: state  = distribution(generator); break;
-            case 1: state = distribution(generator)+ 1 ;break;
-            case 2: state = distribution(generator)+3; break;
+           /* case 0: state  = distribution(generator)?0:1; break;
+            case 1: state = distribution(generator)?1:2; break;
+            case 2: state = distribution(generator)?3:4; break;
             case 3: state = 0; break;
-            case 4: break;
-			default: assert(0); //unexpected state
+            case 4: break;*/
+                
+            case 999999: break;
+            default: state = distribution(generator)?state:state+1; break; //unexpected state
 		}
 		trace.push_back(state);
 	}
@@ -84,30 +87,39 @@ resultt checkproperty(tracet trace)
         std::vector<unsigned>::iterator s3 = std::find(trace.begin(), trace.end(), 3);
         std::vector<unsigned>::iterator s4 = std::find(trace.begin(), trace.end(), 4);
     
-    if(s3 == trace.end())
+    if(s3 == trace.end() || s4== trace.end())
     {
         std::cout<< "String is neither a counterexample or a witness \n";
         return UNKNOWN;
     }
-    else if (*s3>*s4)
+    else if (s3-trace.begin()>s4-trace.begin())
     {
-        std::cout<<"Reached S3 in " <<*s3<<" steps and s4 in " << *s4 << " steps , string is a counterexample \n";
+        std::cout<<"Reached S3 in " <<s3 - trace.begin()<<" steps and s4 in " << s4 - trace.begin() << " steps , string is a counterexample \n";
         return FAIL;
-    }
-    else if (*s3 < *s4)
-    {
-        std::cout<<"Reached S3 in " <<*s3<<" steps and s4 in " << *s4 << " steps , string is a witness \n";
-        return PASS;
     }
     else
     {
-        std::cout<<"Something has gone wrong: reached S3 in " <<*s3<<" steps and s4 in " << *s4 << " steps ";
+        std::cout<<"Reached S3 in " <<s3 - trace.begin()<<" steps and s4 in " << s4 - trace.begin() << " steps , string is a witness \n";
+        return PASS;
     }
+  
+    return UNKNOWN;
 	
 }
 
 
-int main()
+int main(int argc, const char *argv[])
 {
-	statmodelcheck();
+	std::cout<< "Number of strings: "<<argc<<"\n";
+    if (argc==2)
+        pctl_tokenizer(argv[1]);
+    else
+    {
+        std::cout<<"wrong number of strings \n";
+        for (int i=0;i<argc; i++)
+        {
+            std::cout<<"string: "<< argv[i]<<"\n";
+        
+        }
+}
 }

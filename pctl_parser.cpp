@@ -43,9 +43,19 @@ pctlformula parseprimary(std::vector<tokent> &tokenseq)
 			return f;
 		}
 		else{
-			//error
-			std::cout<< "missing right parenthesis"
-		} 
+			std::cout<< "missing right parenthesis";
+		}
+	}
+
+	else if (!tokenseq.empty()){
+		switch(tokenseq.front().kind){
+				case UNTIL: std::cout<<"UNTIL must be preceeded by an identifier"; break;
+				case AND: std::cout<<"AND must be preceeded by an identifier"; break;
+				case OR: std::cout<<"OR must be preceeded by an identifier"; break;
+				default: ;
+			}
+			
+		 
 
 	}	
 

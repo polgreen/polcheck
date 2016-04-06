@@ -44,6 +44,7 @@ pctlformula parseprimary(std::vector<tokent> &tokenseq)
 		}
 		else{
 			//error
+			std::cout<< "missing right parenthesis"
 		} 
 
 	}	
@@ -127,6 +128,11 @@ pctlformula parseuntil(std::vector<tokent> &tokenseq)
 
 pctlformula parse (std::vector<tokent> &tokenseq)
 {
-return parseuntil(tokenseq);
-
+pctlformula f;
+f =  parseuntil(tokenseq);
+if(!tokenseq.empty())
+{
+	std::cout<<"parse error: tokens after end of expression \n";
+}
+return f;
 }

@@ -9,8 +9,8 @@ void output(pctlformula f)
  {
  case IDENTIFIER: std::cout<< f.t.label; break;
  case UNTIL: output(f.children[0]); std::cout<< " U "; output(f.children[1]); break;
- case AND:  output(f.children[0]); std::cout<< " & "; output(f.children[1]); break;
- case OR:  output(f.children[0]); std::cout<< " | "; output(f.children[1]); break;
+ case AND:   output(f.children[0]); std::cout<< " & "; output(f.children[1]); break;
+ case OR:    std::cout << "("; output(f.children[0]); std::cout<< " | "; output(f.children[1]); std::cout << ")"; break;
  case PROB: std::cout<<"P "; break;
  case NOT: std::cout<<"!"; break;
  case GT: std::cout<<">";break;

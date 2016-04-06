@@ -55,9 +55,9 @@ pctlformula parseprimary(std::vector<tokent> &tokenseq)
 				default: ;
 			}
 			
-		 
-
 	}	
+	else
+		{std::cout<<"empty tokenseq";}
 
 }
 
@@ -67,15 +67,21 @@ pctlformula parseconjunction(std::vector<tokent> &tokenseq)
 	f0 = parseprimary(tokenseq);
 	if(tokenseq.front().kind==AND)
 	{
-	pctlformula f1;
-	tokenseq.erase(tokenseq.begin());
-	f1 = parseconjunction(tokenseq);
-	pctlformula f;
-	f.t.kind = AND;
-	f.children.resize(2);
-	f.children[0] = f0;
-	f.children[1] = f1;
-	return f;
+	 pctlformula f1;
+	 tokenseq.erase(tokenseq.begin());
+	 if(tokenseq.empty())
+	 {
+		std::cout<<"error. Expected identifier after AND";
+	 }
+	 else{
+	  f1 = parseconjunction(tokenseq);
+	  pctlformula f;
+	  f.t.kind = AND;
+	  f.children.resize(2);
+	  f.children[0] = f0;
+	  f.children[1] = f1;
+	  return f;
+	 }
 	}
 	else
 	{
@@ -93,14 +99,20 @@ pctlformula parsedisjunction(std::vector<tokent> &tokenseq)
 	{
 	pctlformula f1;
 	tokenseq.erase(tokenseq.begin());
-	f1 = parsedisjunction(tokenseq);
-	pctlformula f;
-	f.t.kind = OR;
-	f.children.resize(2);
-	f.children[0] = f0;
-	f.children[1] = f1;
-	return f;
-	}
+	 if(tokenseq.empty())
+	 {
+		std::cout<<"error. Expected identifier after OR";
+	 }
+	 else{
+	 f1 = parsedisjunction(tokenseq);
+     pctlformula f;
+	 f.t.kind = OR;
+	 f.children.resize(2);
+	 f.children[0] = f0;
+	 f.children[1] = f1;
+	 return f;
+	 }
+	} 
 	else
 	{
 		return f0;
@@ -119,13 +131,19 @@ pctlformula parseuntil(std::vector<tokent> &tokenseq)
 	{
 	pctlformula f1;
 	tokenseq.erase(tokenseq.begin());
-	f1 = parsedisjunction(tokenseq);
-	pctlformula f;
-	f.t.kind = UNTIL;
-	f.children.resize(2);
-	f.children[0] = f0;
-	f.children[1] = f1;
-	return f;
+	if(tokenseq.empty())
+	 {
+		std::cout<<"error. Expected identifier after UNTIL";
+	 }
+	else{
+	 f1 = parsedisjunction(tokenseq);
+	 pctlformula f;
+	 f.t.kind = UNTIL;
+	 f.children.resize(2);
+	 f.children[0] = f0;
+	 f.children[1] = f1;
+	 return f;
+	 }
 	}
 	else
 	{
@@ -139,10 +157,16 @@ pctlformula parseuntil(std::vector<tokent> &tokenseq)
 pctlformula parse (std::vector<tokent> &tokenseq)
 {
 pctlformula f;
-f =  parseuntil(tokenseq);
-if(!tokenseq.empty())
+if(tokenseq.empty())
 {
-	std::cout<<"parse error: tokens after end of expression \n";
+	std::cout<<"parse error: empty tokenseq";
 }
-return f;
+else{
+ f =  parseuntil(tokenseq);
+  if(!tokenseq.empty())
+  {
+	std::cout<<"parse error: tokens after end of expression \n";
+  }
+ return f;
+}
 }

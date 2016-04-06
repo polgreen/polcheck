@@ -4,6 +4,8 @@
 #include <algorithm>
 #include <iostream>
 #include "pctl_tokenizer.h"
+#include "pctl_parser.h"
+
 
 typedef std::vector<unsigned> tracet; 
 enum resultt {UNKNOWN, PASS, FAIL};
@@ -110,9 +112,17 @@ resultt checkproperty(tracet trace)
 
 int main(int argc, const char *argv[])
 {
+        std::vector<tokent> tokenseq;
 	std::cout<< "Number of strings: "<<argc<<"\n";
     if (argc==2)
-        pctl_tokenizer(argv[1]);
+    {
+        tokenseq = pctl_tokenizer(argv[1]);
+        pctlformula f = parse(tokenseq);
+        std::cout<<"\n";
+        output(f);
+        std::cout<<"\n";
+
+    }
     else
     {
         std::cout<<"wrong number of strings \n";

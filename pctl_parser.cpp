@@ -8,8 +8,8 @@ void output(pctlformula f)
  switch(f.t.kind)
  {
  case IDENTIFIER: std::cout<< f.t.label; break;
- case UNTIL: output(f.children[0]); std::cout<< " U "; output(f.children[1]); break;
- case AND:   output(f.children[0]); std::cout<< " & "; output(f.children[1]); break;
+ case UNTIL:std::cout<<"("; output(f.children[0]); std::cout<< " U "; output(f.children[1]);std::cout<<")"; break;
+case AND:  std::cout<<"("; output(f.children[0]); std::cout<< " & "; output(f.children[1]); std::cout<<")";break;
  case OR:    std::cout << "("; output(f.children[0]); std::cout<< " | "; output(f.children[1]); std::cout << ")"; break;
  case PROB: std::cout<<"P "; break;
  case NOT: std::cout<<"!"; break;
@@ -123,28 +123,7 @@ pctlformula parseuntil(std::vector<tokent> &tokenseq)
 }
 
 
-pctlformula parseparenthesis(std::vector<tokent> &tokenseq)
-{
-	pctlformula f0;
-	f0 = parseuntil(tokenseq);
-	if(tokenseq.front().kind==LP)
-	{
-	pctlformula f1;
-	tokenseq.erase(tokenseq.begin());
-	f1 = parseconjunction(tokenseq);
-	pctlformula f;
-	f.t.kind = LP;
-	f.children.resize(2);
-	f.children[0] = f0;
-	f.children[1] = f1;
-	return f;
-	}
-	else
-	{
-		return f0;
-	}
 
-}
 
 pctlformula parse (std::vector<tokent> &tokenseq)
 {

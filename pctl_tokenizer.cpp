@@ -4,7 +4,9 @@
 
 bool isseperator (char letter)
 {
-  return letter == '(' || letter ==')' || letter=='=' ||letter=='<'||letter=='>'||letter=='|'||letter=='&' ||letter==' ';
+  return letter == '(' || letter ==')' || letter=='=' ||letter=='<'||letter=='>'
+  ||letter=='|'||letter=='&' ||letter==' '|| letter == '"' || letter=='[' || letter==']' 
+  || letter=='!' || letter=='?';
 }
 
 void token(tokent token)
@@ -21,7 +23,14 @@ void token(tokent token)
   case EQ:std::cout<<"EQ\n";break;
   case LP: std::cout<<"LP\n"; break;
   case RP: std::cout<<"RP \n"; break;
-  case SP: std::cout<<"SP \n"; break;
+  case SLP: std::cout<<"SLP \n"; break;
+  case SRP: std::cout<<"SRP \n"; break;
+  case FI: std::cout<<"F \n"; break;
+  case GL: std::cout<<"G \n"; break;
+  case X: std::cout<<"X \n"; break;
+  case MIN: std::cout<<"min"; break;
+ case MAX: std::cout<<"max"; break;
+ case QUE: std::cout<<"?"; break;
   default:;
   }
 }
@@ -35,6 +44,21 @@ void emptybuffer(std::string &buffer, std::vector<tokent> &tokenseq)
   }
   else if (buffer=="P"){
     t.kind = PROB; tokenseq.push_back(t);
+  }
+  else if (buffer=="F"){
+   t.kind = FI; tokenseq.push_back(t);
+  }
+  else if (buffer=="G"){
+  t.kind = GL; tokenseq.push_back(t); 
+  }
+  else if (buffer=="X"){
+  t.kind = X; tokenseq.push_back(t); 
+  }
+  else if(buffer=="min"){
+    t.kind=MIN; tokenseq.push_back(t);
+  }
+  else if (buffer=="max"){
+    t.kind=MAX; tokenseq.push_back(t);
   }
   else{
     t.kind=IDENTIFIER;
@@ -61,11 +85,24 @@ std::vector<tokent>  pctl_tokenizer(std::string input)
           case '!': t.kind = NOT; tokenseq.push_back(t);break;
           case '&': t.kind = AND; tokenseq.push_back(t);break;
           case '|': t.kind = OR; tokenseq.push_back(t);break;
-          case '>': t.kind = GT; tokenseq.push_back(t);break;
-          case '<': t.kind = LT; tokenseq.push_back(t);break;
-          case '=': t.kind = EQ; tokenseq.push_back(t);break;
+          case '>': pos++;
+          if(pos!= input.end() && *pos=='=')
+          {t.kind=GE; tokenseq.push_back(t); break;}
+          else {t.kind = GT; tokenseq.push_back(t); pos--;break;}
+          case '<': pos++;
+          if(pos!= input.end() && *pos=='=')
+          {t.kind=LE; tokenseq.push_back(t); break;}
+          else {t.kind = LT; tokenseq.push_back(t); pos--;break;}
+          case '=': pos++;
+          if(pos!= input.end() && *pos=='>')
+          {t.kind=IMPLIES; tokenseq.push_back(t); break;}
+          else {t.kind = EQ; tokenseq.push_back(t); pos--;break;}
+
           case '(': t.kind = LP; tokenseq.push_back(t); break;
           case ')': t.kind = RP; tokenseq.push_back(t); break;
+          case '[': t.kind = SLP; tokenseq.push_back(t); break;
+          case ']': t.kind = SRP; tokenseq.push_back(t); break;
+          case '?': t.kind=QUE; tokenseq.push_back(t); break;
           case ' ': ;break;
           default:;
         }

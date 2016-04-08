@@ -1,0 +1,1 @@
+g++ main.cpp pctl_tokenizer.cpp pctl_parser.cpp markov_chain.cpp -std=c++11

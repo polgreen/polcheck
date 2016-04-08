@@ -5,9 +5,10 @@
 #include <iostream>
 #include "pctl_tokenizer.h"
 #include "pctl_parser.h"
+#include "markov_chain.h"
 
 
-typedef std::vector<unsigned> tracet; 
+typedef std::vector<statet> tracet; 
 enum resultt {UNKNOWN, PASS, FAIL};
 tracet gettrace(std::default_random_engine &);
 resultt checkproperty(tracet);
@@ -41,51 +42,47 @@ void statmodelcheck()
 tracet gettrace(std::default_random_engine &generator)
 {
 	tracet trace;
-	unsigned state;
-	state =0; // initial state = 0
-
+	statet state = get_init_state();
 
 	while (trace.size() < tracelength)
 	{
-		std::uniform_int_distribution<int> distribution(0,1);
-		switch(state)
-		{	
-           /* case 0: state  = distribution(generator)?0:1; break;
-            case 1: state = distribution(generator)?1:2; break;
-            case 2: state = distribution(generator)?3:4; break;
-            case 3: state = 0; break;
-            case 4: break;*/
-                
-            case 999999: break;
-            default: state = distribution(generator)?state:state+1; break; //unexpected state
-		}
+        std::vector<std::pair<statet,unsigned> > successors;
+        successors = get_successors(state);
+
+        unsigned sum = 0;
+       
+        for (const auto& p :successors)
+        {   
+            sum = sum + p.second;
+            
+        }  
+       
+		std::uniform_int_distribution<unsigned> distribution(0,sum-1);
+        unsigned random = distribution(generator);
+        unsigned mass =0;
+
+        for(const auto& p : successors)
+         {
+          mass = mass + p.second;
+          if(mass > random){ state = p.first; break;}   
+         }
+
 		trace.push_back(state);
 	}
 	return trace;
 }
 
+void printtrace(tracet trace)
+{
+    for(const auto &s: trace) 
+    {
+        printstate(s);
+    }
+}
+
 resultt checkproperty(tracet trace)
 {
-    //property = (true U<4 "state3"), i.e., reach state 3 within 4 steps.
-   /* std::vector<unsigned>::iterator it = std::find(trace.begin(), trace.end(), 3);
-    if(it == trace.end())
-    {
-        std::cout << "Property not satisfied, did not reach state 2 \n";
-        return FAIL;
-    }
-    else if (*it<4)
-    {
-        std::cout << "Satisfies property, reached state 2 in position " << *it << "\n";
-        return PASS;
-    }
-    else
-    {
-        std::cout<<"Property not satisfied, reached state 2 in position "<< *it << "\n";
-        return FAIL;
-    }
-    */
-    
-    //property = (!s4 U s3)
+   /*
         std::vector<unsigned>::iterator s3 = std::find(trace.begin(), trace.end(), 3);
         std::vector<unsigned>::iterator s4 = std::find(trace.begin(), trace.end(), 4);
     
@@ -105,19 +102,27 @@ resultt checkproperty(tracet trace)
         return PASS;
     }
   
-    return UNKNOWN;
+    return UNKNOWN;*/
 	
 }
 
 
 int main(int argc, const char *argv[])
 {
-        std::vector<tokent> tokenseq;
+
+/*
+  tracet trace;
+  std::default_random_engine generator;
+  trace = gettrace(generator);
+  printtrace(trace);
+  */  
+    std::vector<tokent> tokenseq;
 	std::cout<< "Number of strings: "<<argc<<"\n";
     if (argc==2)
     {
         tokenseq = pctl_tokenizer(argv[1]);
-        pctlformula f = parse(tokenseq);
+       
+        pctlformula f = parse_top(tokenseq);
         std::cout<<"\n";
         output(f);
         std::cout<<"\n";
@@ -131,5 +136,7 @@ int main(int argc, const char *argv[])
             std::cout<<"string: "<< argv[i]<<"\n";
         
         }
-}
+ }
+
+
 }

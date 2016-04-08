@@ -3,4 +3,4 @@
 #include <iostream>
 struct pctlformula {tokent t; std::vector<pctlformula> children ; };
 void output(pctlformula f);
-pctlformula parse (std::vector<tokent> &tokenseq);
+pctlformula parse_top (std::vector<tokent> &tokenseq);

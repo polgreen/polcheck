@@ -1,5 +1,6 @@
 #include "markov_chain.h"
 #include <iostream>
+#include "pctl_parser.h"
 
 
 statet get_init_state()
@@ -31,3 +32,5 @@ void printstate(statet s)
 {
 	std::cout<<"bus: "<<s.hasbus<<"\n";
 }
+
+

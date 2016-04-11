@@ -110,12 +110,12 @@ resultt checkproperty(tracet trace)
 int main(int argc, const char *argv[])
 {
 
-/*
+
   tracet trace;
   std::default_random_engine generator;
   trace = gettrace(generator);
   printtrace(trace);
-  */  
+    
     std::vector<tokent> tokenseq;
 	std::cout<< "Number of strings: "<<argc<<"\n";
     if (argc==2)

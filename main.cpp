@@ -7,10 +7,10 @@
 #include "pctl_parser.h"
 #include "markov_chain.h"
 #include "propcheck.h"
+#include "statmodelchecker.h"
 
 
-typedef std::vector<statet> tracet; 
-enum resultt {UNKNOWN, PASS, FAIL};
+
 tracet gettrace(std::default_random_engine &);
 resultt checkproperty(tracet);
 unsigned N = 100;

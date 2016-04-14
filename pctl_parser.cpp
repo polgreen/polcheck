@@ -348,8 +348,11 @@ pctlformula parseuntil(std::vector<tokent> &tokenseq)
 	  {
 		std::cout<<"error. Expected identifier after UNTIL \n";
 	  }
-	 else if (tokenseq.front().kind==GE || tokenseq.front().kind==LE ||
-	 	tokenseq.front().kind==GT || tokenseq.front().kind==LT)
+	 else if(tokenseq.front().kind==GT || tokenseq.front().kind==GE)
+	 {
+	 	std::cout<<"error: GT and GE not allowed after UNTIL \n";
+	 }
+	 else if (tokenseq.front().kind==LT || tokenseq.front().kind==LE)
 	 {
 	 	f2.t.kind=tokenseq.front().kind;
 		tokenseq.erase(tokenseq.begin());

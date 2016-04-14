@@ -96,9 +96,36 @@ satset checkUNTIL(satset set1, satset set2)
 			{done=true;}
 		R=R2;
 	}
-
  return checkNOT(R);
+}
 
+satset checkBUNTIL(satset set1, satset set2, unsigned limit, tokent sign)
+{
+	satset R, R2, R3, successors;
+	R = set2;
+	R2=R;
+	unsigned steps=0;
+	bool done=false;
+	while(done==false)
+	{
+		for(const auto & s1: set1)
+		{
+			successors = get_successor_states(s1);
+			
+			for(const auto & succ: successors)
+				{	
+					if(std::find(R.begin(), R.end(), succ)==R.end())
+					 R2.push_back(succ);
+				}					
+		}
+		steps=steps++;
+		if(sign.kind==LE && (R2==R || steps>limit))
+			{done=true;}
+		else if(sign.kind==LT && (R2==R || steps>=limit))
+			{done=true;}
+		R=R2;
+	}
+ return checkNOT(R);
 }
 
 satset checkIMPLIES(satset set1, satset set2)

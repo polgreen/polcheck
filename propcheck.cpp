@@ -2,7 +2,7 @@
 #include "pctl_parser.h"
 #include <algorithm>
 #include <iostream>
-
+satset allstates;
 
 typedef satset::iterator stateiterator;
 
@@ -10,6 +10,12 @@ bool operator==(const statet &s1, const statet &s2)
 {
  return s1.hasbus==s2.hasbus &&
         s1.clients==s2.clients;
+}
+
+
+void set_all_states()
+{
+	allstates = get_all_states();
 }
 
 void output_satset(satset s)
@@ -27,6 +33,8 @@ satset checkIdentifier(pctlformula f)
 	satset s;
 	if(f.t.kind!= IDENTIFIER)
 	{std::cout<<"ERROR: checkIdentifier called with a pctlformula that is not an IDENTIFIER \n";}
+
+	
 	return s;
 }
 
@@ -53,7 +61,6 @@ return set2;
 
 satset checkNOT(satset set1)
 {
-	satset allstates = g_allstates;
 	satset result;
 	for(const auto & s1 : set1)
  {
@@ -64,7 +71,6 @@ satset checkNOT(satset set1)
 		allstates.pop_back();
 	}
  }
- output_satset(allstates);
  return allstates;
 }
 
@@ -95,16 +101,22 @@ satset checkUNTIL(satset set1, satset set2)
 
 }
 
+satset checkIMPLIES(satset set1, satset set2)
+{
+	return checkOR(checkNOT(set1), set2);
+}
+
 
 
 
 satset check(pctlformula f)
 {
+	allstates = get_all_states();
 	
 	switch (f.t.kind)
 	{
 	 case IDENTIFIER: return checkIdentifier(f); break;
-//   case UNTIL: return checkUntil(check(f.children[0]), check(f.children[1]) ); break;
+     case UNTIL: return checkUNTIL(check(f.children[0]), check(f.children[1]) ); break;
 	 case AND: return checkAND(check(f.children[0]), check(f.children[1])); break;
  	 case OR:  return checkOR(check(f.children[0]), check(f.children[1])); break;
 // 	 case PROB: ;break;

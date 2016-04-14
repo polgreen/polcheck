@@ -1,7 +1,7 @@
 #include "markov_chain.h"
 #include <iostream>
 
-extern satset g_allstates;
+
 
 statet get_init_state()
 {
@@ -33,7 +33,7 @@ void printstate(statet s)
 	std::cout<<"bus: "<<s.hasbus<<"\n";
 }
 
-void get_all_states()
+satset get_all_states()
 {
 	satset allstates;
 	statet s;
@@ -44,7 +44,7 @@ void get_all_states()
 		allstates.push_back(s);
 	}
 
-	g_allstates = allstates;
+	return allstates;
 }
 
 satset get_successor_states(statet current)

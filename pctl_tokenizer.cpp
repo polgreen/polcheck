@@ -12,25 +12,27 @@ bool isseperator (char letter)
 void token(tokent token)
 {
   switch(token.kind){
-  case PROB: std::cout<<"prob \n";break;
-  case UNTIL: std::cout<<"until \n";break;
-  case IDENTIFIER: std::cout<<"IDENTIFIER "<<token.label<<"\n";break;
-  case NOT: std::cout<<"NOT\n";break;
-  case AND: std::cout<<"AND\n";break;
-  case OR: std::cout<<"OR\n";break;
-  case GT: std::cout<<"GT\n";break;
-  case LT: std::cout<<"LT\n";break;
-  case EQ:std::cout<<"EQ\n";break;
-  case LP: std::cout<<"LP\n"; break;
-  case RP: std::cout<<"RP \n"; break;
-  case SLP: std::cout<<"SLP \n"; break;
-  case SRP: std::cout<<"SRP \n"; break;
-  case FI: std::cout<<"F \n"; break;
-  case GL: std::cout<<"G \n"; break;
-  case X: std::cout<<"X \n"; break;
-  case MIN: std::cout<<"min"; break;
- case MAX: std::cout<<"max"; break;
- case QUE: std::cout<<"?"; break;
+  case PROB: std::cout<<"prob ";break;
+  case UNTIL: std::cout<<"until ";break;
+  case IDENTIFIER: std::cout<<"IDENTIFIER "<<token.label << " "; fflush(stdout); break;
+  case NOT: std::cout<<"NOT ";break;
+  case AND: std::cout<<"AND ";break;
+  case OR: std::cout<<"OR ";break;
+  case GT: std::cout<<"GT ";break;
+  case LT: std::cout<<"LT ";break;
+  case EQ:std::cout<<"EQ ";break;
+  case LP: std::cout<<"LP "; break;
+  case RP: std::cout<<"RP "; break;
+  case SLP: std::cout<<"SLP "; break;
+  case SRP: std::cout<<"SRP "; break;
+  case FI: std::cout<<"F "; break;
+  case GL: std::cout<<"G "; break;
+  case X: std::cout<<"X "; break;
+  case MIN: std::cout<<"min "; break;
+ case MAX: std::cout<<"max "; break;
+ case QUE: std::cout<<"? "; break;
+ case GE: std::cout<<"GE "; break;
+ case LE: std::cout<<"LE "; break;
   default:;
   }
 }
@@ -87,7 +89,8 @@ std::vector<tokent>  pctl_tokenizer(std::string input)
           case '|': t.kind = OR; tokenseq.push_back(t);break;
           case '>': pos++;
           if(pos!= input.end() && *pos=='=')
-          {t.kind=GE; tokenseq.push_back(t); break;}
+          { t.kind=GE; 
+            tokenseq.push_back(t); break;}
           else {t.kind = GT; tokenseq.push_back(t); pos--;break;}
           case '<': pos++;
           if(pos!= input.end() && *pos=='=')

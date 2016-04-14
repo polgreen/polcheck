@@ -9,12 +9,14 @@ void output(pctlformula f)
 {
  switch(f.t.kind)
  {
- case IDENTIFIER: std::cout<< '"'<<f.t.label<<'"'; break;
+ case IDENTIFIER: std::cout<< ' '<<f.t.label<<' '; break;
  case UNTIL:std::cout<<"("; output(f.children[0]); std::cout<< " U "; output(f.children[1]);std::cout<<")"; break;
+ case BUNTIL:std::cout<<"("; output(f.children[0]); std::cout<< " U"; output(f.children[2]); output(f.children[3]);
+ 	output(f.children[1]);std::cout<<")"; break;
 case AND:  std::cout<<"("; output(f.children[0]); std::cout<< " & "; output(f.children[1]); std::cout<<")";break;
  case OR:    std::cout << "("; output(f.children[0]); std::cout<< " | "; output(f.children[1]); std::cout << ")"; break;
- case PROB: std::cout<<"P "; output(f.children[0]); output(f.children[1]); 
- output(f.children[2]); std::cout<<"[";output(f.children[3]); std::cout<<"]";break;
+ case PROB: std::cout<<"P"; output(f.children[0]); output(f.children[1]); 
+ 	output(f.children[2]); std::cout<<"[";output(f.children[3]); std::cout<<"]";break;
  case NOT: std::cout<<"!"; output(f.children[0]); break;
  case GT: std::cout<<">"; output(f.children[0]);break;
  case LT: std::cout<<"<";output(f.children[0]);break;
@@ -31,6 +33,7 @@ case AND:  std::cout<<"("; output(f.children[0]); std::cout<< " & "; output(f.ch
  case IMPLIES: std::cout<<"implies"; break;
  case GE: std::cout<<">="; break;
  case LE: std::cout<<"<="; break;
+
  default:;
  }
 }
@@ -41,6 +44,7 @@ void outputtoken(std::vector<tokent> &tokenseq)
         {
             token(tokenseq.at(i));
         }
+        std::cout<<"\n";
 }
 
 pctlformula parseprob(std::vector<tokent> &tokenseq)
@@ -52,12 +56,13 @@ pctlformula parseprob(std::vector<tokent> &tokenseq)
 	{
 		std::cout<<"expected bounds after P \n";
 	}
-	else if (tokenseq.front().kind==GE || tokenseq.front().kind==LE)
+		else if (tokenseq.front().kind==GE || tokenseq.front().kind==LE ||
+		tokenseq.front().kind==GT || tokenseq.front().kind==LT)
 	{
 		f0.t.kind=tokenseq.front().kind;
 		tokenseq.erase(tokenseq.begin());
 		if(tokenseq.empty())
-			{std::cout<<"expected identifier after P>= or P<=";}
+			{std::cout<<"expected identifier after P>=, P>, P< or P<=";}
 		else{
 			f1 = parseprimary(tokenseq);
 			f.children.resize(4);
@@ -303,7 +308,7 @@ pctlformula parseFG(std::vector<tokent> &tokenseq)
 		return f0;
 	}
 }
-
+/*
 pctlformula parseuntil(std::vector<tokent> &tokenseq)
 {
 	pctlformula f0;
@@ -331,7 +336,65 @@ pctlformula parseuntil(std::vector<tokent> &tokenseq)
 		return f0;
 	}
 }
+*/
+pctlformula parseuntil(std::vector<tokent> &tokenseq)
+{
+	pctlformula f,f0,f1,f2,f3;
+	f0 = parseFG(tokenseq);
+	if(tokenseq.front().kind==UNTIL)
+	{
+	 tokenseq.erase(tokenseq.begin());
+	 if(tokenseq.empty())
+	  {
+		std::cout<<"error. Expected identifier after UNTIL \n";
+	  }
+	 else if (tokenseq.front().kind==GE || tokenseq.front().kind==LE ||
+	 	tokenseq.front().kind==GT || tokenseq.front().kind==LT)
+	 {
+	 	f2.t.kind=tokenseq.front().kind;
+		tokenseq.erase(tokenseq.begin());
+		if(!tokenseq.empty() && tokenseq.front().kind==IDENTIFIER)
+			{
+			//outputtoken(tokenseq);
+			f3 = parseprimary(tokenseq);
+			//outputtoken(tokenseq);
 
+			if(tokenseq.empty())
+			{std::cout<<"Error: expected something after UNTIL \n";}
+			else
+			{
+		//	outputtoken(tokenseq);
+			f1 = parseFG(tokenseq);
+			f.t.kind=BUNTIL;
+			f.children.resize(4);
+			f.children[0] = f0;
+			f.children[1] = f1;
+			f.children[2] = f2;
+			f.children[3] = f3; 
+			return f;
+			}
+		}
+		else{std::cout<<"expected identifier after U>=, U>, U<, or U<= \n";}
+	 }
+	 else
+	  {
+	  	f1=parseFG(tokenseq);
+	  	f.t.kind=UNTIL;
+	  	f.children.resize(2);
+	  	f.children[0]=f0;
+	  	f.children[1]=f1;
+	  	return f;
+	  }
+	 }
+
+	 else
+	 {
+	 	return f0;
+	 }
+	
+
+
+}
 
 
 

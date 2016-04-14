@@ -134,7 +134,8 @@ int main(int argc, const char *argv[])
     if (argc==2)
     {
         tokenseq = pctl_tokenizer(argv[1]);
-       
+        outputtoken(tokenseq);
+        fflush(stdout);
         pctlformula f = parse_top(tokenseq);
         std::cout<<"\n";
         output(f);

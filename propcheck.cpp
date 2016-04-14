@@ -108,7 +108,6 @@ satset checkIMPLIES(satset set1, satset set2)
 
 
 
-
 satset check(pctlformula f)
 {
 	allstates = get_all_states();

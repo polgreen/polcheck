@@ -1,11 +1,12 @@
 #include "markov_chain.h"
 #include "pctl_parser.h"
+#include <algorithm>
 satset allstates;
 
 
 
 
-satset allstatesexcept(satset s, satset allstates)
+satset allstatesexcept(satset s)
 {
 	std::vector<statet>::iterator i;
 	for( i = allstates.begin(); i!=allstates.end(); i++)
@@ -21,20 +22,27 @@ satset checkIdentifier(pctlformula f)
 	satset s;
 	if(f.t.kind!= IDENTIFIER)
 	{std::cout<<"ERROR: checkIdentifier called with a pctlformula that is not an IDENTIFIER \n";}
+
+	
 	return s;
 }
 
 satset checkUntil (satset f1, satset f2)
 {	
-	satset s;
-	satset s_no;
-	satset s_yes;
+	satset R =f2;
+	satset R2;
 	bool done = false;
 	while(done==false)
 	{
-
+		R2 = R;
+		//for(i=f2.begin(); i!=f2.end(); i++)
+		//	{ //look for successors --------------------------------------------TO DO
+	//	}
+	//	if(std::is_permutation(R.begin(),R.end(),R2.begin(),R2.end()))
+	//		{done==true;}
 	}
-	return s;
+
+	return allstatesexcept(R);
 }
 
 satset checkAnd(satset f1, satset f2)
@@ -56,6 +64,19 @@ satset checkOr(satset f1, satset f2)
 	return f1;
 }
 
+satset checkImplies(satset f1, satset f2) // a -> b = (a & b)|| b
+{
+	satset s;
+	std::vector<statet>::iterator i;
+	for(i=f2.begin(); i!=f2.end(); i++)
+	{
+	 if(std::find(f1.begin(),f1.end(),*i)!=f1.end())
+	 {	s.push_back(*i);}
+	}
+	f1.insert(s.end(),f2.begin(),f2.end()); // THIS LINE ADDS DUPLICATE STATES ------------ TO DO
+}
+
+
 
 satset check(pctlformula f)
 {
@@ -66,7 +87,7 @@ satset check(pctlformula f)
 	 case AND: return checkAnd(check(f.children[0]), check(f.children[1])); break;
  	 case OR:  return checkOr(check(f.children[0]), check(f.children[1])); break;
   	 case PROB: ;break;
- 	 case NOT: return allstatesexcept(check(f.children[0]), allstates); break;
+ 	 case NOT: return allstatesexcept(check(f.children[0])); break;
 
  	 case GT: ;break;
  	 case LT: ;break;

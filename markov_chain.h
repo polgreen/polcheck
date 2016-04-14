@@ -8,5 +8,8 @@ statet get_init_state();
 std::vector<std::pair<statet,unsigned> > get_successors(statet current);
 void printstate(statet s);
 typedef std::vector <statet> satset; 
+void get_all_states();
+satset get_successor_states(statet current);
+extern satset g_allstates;
 
 #endif

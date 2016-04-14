@@ -6,6 +6,7 @@
 #include "pctl_tokenizer.h"
 #include "pctl_parser.h"
 #include "markov_chain.h"
+#include "propcheck.h"
 
 
 typedef std::vector<statet> tracet; 
@@ -109,8 +110,22 @@ resultt checkproperty(tracet trace)
 
 int main(int argc, const char *argv[])
 {
+   
+    satset s;
+    satset result;
+    statet state;
+    
+    get_all_states();
+    output_satset(allstates);
+    state.hasbus = 1;
+    state.clients=10;
+    s.push_back(state);
+    
+
+    result = checkNOT(s);
 
 
+/*
   tracet trace;
   std::default_random_engine generator;
   trace = gettrace(generator);
@@ -137,6 +152,6 @@ int main(int argc, const char *argv[])
         
         }
  }
-
+*/
 
 }

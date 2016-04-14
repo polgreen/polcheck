@@ -1,7 +1,7 @@
 #include "markov_chain.h"
 #include <iostream>
-#include "pctl_parser.h"
 
+extern satset g_allstates;
 
 statet get_init_state()
 {
@@ -33,4 +33,32 @@ void printstate(statet s)
 	std::cout<<"bus: "<<s.hasbus<<"\n";
 }
 
+void get_all_states()
+{
+	satset allstates;
+	statet s;
+	for(unsigned i=0; i<10; i++)
+	{
+		s.hasbus=i;
+		s.clients=10;
+		allstates.push_back(s);
+	}
 
+	g_allstates = allstates;
+}
+
+satset get_successor_states(statet current)
+{
+ 	satset result;
+	 std::vector<std::pair<statet,unsigned> > successors;
+	 successors = get_successors(current);
+
+	for(const auto & s1: successors)
+	{
+		if(s1.second>0)
+			{result.push_back(s1.first);}
+
+	} 
+return result;
+
+}

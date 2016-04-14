@@ -16,9 +16,9 @@ case AND:  std::cout<<"("; output(f.children[0]); std::cout<< " & "; output(f.ch
  case PROB: std::cout<<"P "; output(f.children[0]); output(f.children[1]); 
  output(f.children[2]); std::cout<<"[";output(f.children[3]); std::cout<<"]";break;
  case NOT: std::cout<<"!"; output(f.children[0]); break;
- case GT: std::cout<<">";break;
- case LT: std::cout<<"<";break;
- case EQ:std::cout<<"=";break;
+ case GT: std::cout<<">"; output(f.children[0]);break;
+ case LT: std::cout<<"<";output(f.children[0]);break;
+ case EQ:std::cout<<"=";output(f.children[0]);break;
  case LP: std::cout<<"("; break;
  case RP: std::cout<<")"; break;
  case SP: std::cout<<" "; break;	

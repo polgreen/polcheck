@@ -20,11 +20,8 @@ void set_all_states()
 
 void output_satset(satset s)
 {
-	   for (unsigned i=0; i<s.size(); i++)
-        {
-        	printstate(s.at(i));           
-        }
-       
+  for (unsigned i=0; i<s.size(); i++)
+        {  printstate(s.at(i)); }
 }	
 
 
@@ -42,11 +39,10 @@ satset checkAND(satset set1, satset set2)
 {
 	satset result;
 	for(const auto & s1 : set1)
- {
-   if(std::find(set2.begin(), set2.end(), s1)!=set2.end())
-     result.push_back(s1);
- }
-return result;
+     {
+      if(std::find(set2.begin(), set2.end(), s1)!=set2.end())
+         result.push_back(s1);
+      } return result;
 }
 
 satset checkOR(satset set1, satset set2)
@@ -55,23 +51,20 @@ satset checkOR(satset set1, satset set2)
  {
    if(std::find(set2.begin(), set2.end(), s1)==set2.end())
      set2.push_back(s1);
- }
-return set2;
+ } return set2;
 }
 
 satset checkNOT(satset set1)
 {
-	satset result;
 	for(const auto & s1 : set1)
- {
+     {
 	auto it = std::find(allstates.begin(), allstates.end(), s1);
 	if(it != allstates.end()){
 		using std::swap;
 		swap(*it, allstates.back());
 		allstates.pop_back();
 	}
- }
- return allstates;
+ } return allstates;
 }
 
 satset checkUNTIL(satset set1, satset set2)
@@ -95,8 +88,7 @@ satset checkUNTIL(satset set1, satset set2)
 		if(R2==R)
 			{done=true;}
 		R=R2;
-	}
- return checkNOT(R);
+	}return checkNOT(R);
 }
 
 satset checkBUNTIL(satset set1, satset set2, unsigned limit, tokent sign)
@@ -124,8 +116,7 @@ satset checkBUNTIL(satset set1, satset set2, unsigned limit, tokent sign)
 		else if(sign.kind==LT && (R2==R || steps>=limit))
 			{done=true;}
 		R=R2;
-	}
- return checkNOT(R);
+	}return checkNOT(R);
 }
 
 satset checkIMPLIES(satset set1, satset set2)

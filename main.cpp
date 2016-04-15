@@ -10,11 +10,11 @@
 #include "statmodelchecker.h"
 
 
-
+enum resultt {UNKNOWN, PASS, FAIL};
 tracet gettrace(std::default_random_engine &);
 resultt checkproperty(tracet);
 unsigned N = 100;
-unsigned tracelength = 10;
+unsigned tracelength = 20;
 
 
 void statmodelcheck()
@@ -79,6 +79,7 @@ void printtrace(tracet trace)
     {
         printstate(s);
     }
+    std::cout<<"\n";
 }
 
 resultt checkproperty(tracet trace)
@@ -110,27 +111,15 @@ resultt checkproperty(tracet trace)
 
 int main(int argc, const char *argv[])
 {
-   /*
-    satset s;
-    satset result;
-    statet state;
-    
-    set_all_states();
-    state.hasbus = 1;
-    state.clients=10;
-    s.push_back(state);
-    
-    result = checkNOT(s);
-
-*/
-
+ 
   tracet trace;
   std::default_random_engine generator;
   trace = gettrace(generator);
-  printtrace(trace);
-    
-    std::vector<tokent> tokenseq;
-	std::cout<< "Number of strings: "<<argc<<"\n";
+  printtrace(trace); 
+
+
+  std::vector<tokent> tokenseq;
+  std::cout<< "Number of strings: "<<argc<<"\n";
     if (argc==2)
     {
         tokenseq = pctl_tokenizer(argv[1]);
@@ -141,14 +130,16 @@ int main(int argc, const char *argv[])
         output(f);
         std::cout<<"\n";
 
+        tracecheck(f,trace);
+
+
     }
     else
     {
         std::cout<<"wrong number of strings \n";
         for (int i=0;i<argc; i++)
         {
-            std::cout<<"string: "<< argv[i]<<"\n";
-        
+            std::cout<<"string: "<< argv[i]<<"\n";       
         }
  }
 

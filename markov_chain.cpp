@@ -22,9 +22,9 @@ std::vector<std::pair<statet,unsigned> > get_successors(statet current)
  	//add labels////////////////
  	if(i==3 || i==6)
  		{successor.label.push_back(1);}
- 	if(i==4 || i==8)
- 		{successor.label.push_back(2);}
- 	//else{successor.label = 'b';}
+ 	else if(i==4 || i==8)
+ 		{successor.label.push_back(1);}
+ 	else{successor.label.push_back(2);}
  	//////////////////////////////
  	std::pair<statet,unsigned> p;
  	p.first = successor;
@@ -34,7 +34,14 @@ std::vector<std::pair<statet,unsigned> > get_successors(statet current)
 return result;
 }
 
-void printstate(statet s) {std::cout<<s.hasbus<<" ";}
+void printstate(statet s) {
+	std::cout<<s.hasbus<<":";
+	for(const auto &l: s.label)
+	{
+		std::cout<<l;
+	}
+	std::cout<<" ";
+}
 
 satset get_all_states()
 {

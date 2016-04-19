@@ -8,9 +8,10 @@
 #include "markov_chain.h"
 #include "propcheck.h"
 #include "statmodelchecker.h"
+#include "automata.h"
 
 
-enum resultt {UNKNOWN, PASS, FAIL};
+
 tracet gettrace(std::default_random_engine &);
 resultt checkproperty(tracet);
 unsigned N = 100;
@@ -111,13 +112,21 @@ resultt checkproperty(tracet trace)
 
 int main(int argc, const char *argv[])
 {
- 
+  resultt res;  
   tracet trace;
   std::default_random_engine generator;
   trace = gettrace(generator);
   printtrace(trace); 
 
+  res=checkautomata(trace);
+  switch(res)
+  {
+    case PASS: std::cout<<"PASS"; break;
+    case FAIL: std::cout<<"FAIL"; break;
+    case UNKNOWN: std::cout<<"UNKNOWN"; break;
+  }
 
+/*
   std::vector<tokent> tokenseq;
   std::cout<< "Number of strings: "<<argc<<"\n";
     if (argc==2)
@@ -143,5 +152,5 @@ int main(int argc, const char *argv[])
         }
  }
 
-
+*/
 }

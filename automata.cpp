@@ -35,7 +35,8 @@ bool checkautomata(tracet trace, automata A)
 	  {
 	  	for(const auto & l: st.label)
 	  	{
-	  	 next.insert(A[sa].successors.at(l));
+	  		std::set<unsigned> suc = A[sa].successors[l];
+	  	 next.insert(suc.begin(), suc.end());
 	  	}	
 	  }
 	current=next;

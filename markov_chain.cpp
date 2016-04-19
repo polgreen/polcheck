@@ -21,9 +21,9 @@ std::vector<std::pair<statet,unsigned> > get_successors(statet current)
  	successor.hasbus = i;
  	//add labels////////////////
  	if(i==3 || i==6)
- 		{successor.label = 'a';}
+ 		{successor.label.push_back(1);}
  	if(i==4 || i==8)
- 		{successor.label = 'b';}
+ 		{successor.label.push_back(2);}
  	//else{successor.label = 'b';}
  	//////////////////////////////
  	std::pair<statet,unsigned> p;
@@ -34,7 +34,7 @@ std::vector<std::pair<statet,unsigned> > get_successors(statet current)
 return result;
 }
 
-void printstate(statet s) {std::cout<<s.hasbus<<s.label<<" ";}
+void printstate(statet s) {std::cout<<s.hasbus<<" ";}
 
 satset get_all_states()
 {

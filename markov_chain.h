@@ -2,7 +2,7 @@
 #define markov_chain_h
 #include <vector>
 #include <string>
-struct statet {unsigned hasbus; unsigned clients; std::string label; };
+struct statet {unsigned hasbus; unsigned clients; std::vector<unsigned> label; };
 statet get_init_state();
 std::vector<std::pair<statet,unsigned> > get_successors(statet current);
 void printstate(statet s);

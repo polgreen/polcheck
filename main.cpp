@@ -130,7 +130,7 @@ int main(int argc, const char *argv[])
         output(f);
         std::cout<<"\n";
 
-        tracecheck(f,trace);
+      //  tracecheck(f,trace);
 
 
     }

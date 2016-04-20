@@ -24,7 +24,7 @@ std::vector<std::pair<statet,unsigned> > get_successors(statet current)
  		{successor.label.push_back(1);}
  	else if(i==4 || i==8)
  		{successor.label.push_back(1);}
- 	else{successor.label.push_back(2);}
+ 	else{successor.label.push_back(1);}
  	//////////////////////////////
  	std::pair<statet,unsigned> p;
  	p.first = successor;

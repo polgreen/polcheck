@@ -55,8 +55,55 @@ resultt checkautomata(tracet trace)
 	current.insert(0);
 	currentC.insert(0);
 
+
 	for(const auto& st: trace)
 	{	
+		
+		for(const auto & l: st.label)
+		{
+			//take one step in witness automata
+			for(const auto & sa : current)
+			{
+				if(l<A[sa].successors.size()){
+				std::set<unsigned> suc = A[sa].successors[l];
+				next.insert(suc.begin(), suc.end());
+				}
+				else
+				{std::cout<<"error, label is bigger than size of successor set";
+				return UNKNOWN;}
+			}
+			//take one step in counterexample automata
+			for(const auto & saC : currentC)
+			{
+				if(l<C[saC].successors.size()){
+				std::set<unsigned> sucC = C[saC].successors[l];
+				nextC.insert(sucC.begin(), sucC.end());
+				}
+				else
+				{std::cout<<"error, label is bigger than size of successor set";
+				return UNKNOWN;}
+			}
+		}
+		current=next;
+		currentC=nextC;
+	}
+
+
+
+	for(const auto & sc: current)
+	{
+		if(A[sc].accepting)
+		{return PASS;}
+	}
+		for(const auto & scC: currentC)
+	{
+		if(C[scC].accepting)
+		{return FAIL;}
+	}
+
+
+
+	/*
 	//take a step in the witness automata	
 	  for(const auto & sa: current)
 	  {

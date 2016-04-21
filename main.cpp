@@ -79,34 +79,14 @@ void printtrace(tracet trace)
     for(const auto &s: trace) 
     {
         printstate(s);
+
     }
     std::cout<<"\n";
 }
 
 resultt checkproperty(tracet trace)
 {
-   /*
-        std::vector<unsigned>::iterator s3 = std::find(trace.begin(), trace.end(), 3);
-        std::vector<unsigned>::iterator s4 = std::find(trace.begin(), trace.end(), 4);
-    
-    if(s3 == trace.end() || s4== trace.end())
-    {
-        std::cout<< "String is neither a counterexample or a witness \n";
-        return UNKNOWN;
-    }
-    else if (s3-trace.begin()>s4-trace.begin())
-    {
-        std::cout<<"Reached S3 in " <<s3 - trace.begin()<<" steps and s4 in " << s4 - trace.begin() << " steps , string is a counterexample \n";
-        return FAIL;
-    }
-    else
-    {
-        std::cout<<"Reached S3 in " <<s3 - trace.begin()<<" steps and s4 in " << s4 - trace.begin() << " steps , string is a witness \n";
-        return PASS;
-    }
-  
-    return UNKNOWN;*/
-	
+
 }
 
 
@@ -118,6 +98,8 @@ int main(int argc, const char *argv[])
   trace = gettrace(generator);
   printtrace(trace); 
 
+  //system ("./ltl2ba-1.2b1/ltl2ba -f \"a U b\"");
+
   res=checkautomata(trace);
   switch(res)
   {
@@ -126,7 +108,7 @@ int main(int argc, const char *argv[])
     case UNKNOWN: std::cout<<"UNKNOWN"; break;
   }
 
-/*
+
   std::vector<tokent> tokenseq;
   std::cout<< "Number of strings: "<<argc<<"\n";
     if (argc==2)
@@ -138,6 +120,7 @@ int main(int argc, const char *argv[])
         std::cout<<"\n";
         output(f);
         std::cout<<"\n";
+         parsepctlformula(f);
 
       //  tracecheck(f,trace);
 
@@ -152,5 +135,6 @@ int main(int argc, const char *argv[])
         }
  }
 
-*/
+
+
 }

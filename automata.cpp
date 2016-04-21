@@ -4,6 +4,89 @@
 #include "automata.h"
 #include <iostream>
 #include "markov_chain.h"
+#include <string>
+#include <sstream>
+#include <fstream>
+#include <cstdlib>
+
+
+std::string ssystem (const char *command) {
+    char tmpname [L_tmpnam];
+    std::tmpnam ( tmpname );
+    std::string scommand = command;
+    std::string cmd = scommand + " >> " + tmpname;
+    std::system(cmd.c_str());
+    std::ifstream file(tmpname, std::ios::in );
+    std::string result;
+        if (file) {
+      while (!file.eof()) result.push_back(file.get());
+          file.close();
+    }
+    remove(tmpname);
+    return result;
+}
+
+void ltlstring (pctlformula f, std::string& output)
+{
+
+ switch(f.t.kind)
+ {
+ case IDENTIFIER: output+=" ";
+ 		output+= f.t.label; output+=" ";  break;
+ case UNTIL: output+="("; 
+ 			ltlstring(f.children[0], output); 
+ 			output+=" U ";
+ 			ltlstring(f.children[1], output);
+ 			output+=")";
+ 			break;
+
+ case BUNTIL:std::cout<<"LTL2BA does not do bounded until \n"; break;
+ case AND:  output+="("; ltlstring(f.children[0], output); output+=" && "; ltlstring(f.children[1], output); output+=")";break;
+ case OR:    output+= "("; ltlstring(f.children[0],output); output+= " || "; ltlstring(f.children[1],output); output+= ")"; break;
+ case PROB: ;break;
+ case NOT: output+="!"; ltlstring(f.children[0],output); break;
+ case LP: output+="("; break;
+ case RP: output+=")"; break;
+ case SP: output+=" "; break;	
+ case FI: output+="<> "; ltlstring(f.children[0],output); break;
+ case GL: output+="[] "; ltlstring(f.children[0],output); break;
+ case X: output+="X"; ltlstring(f.children[0],output); break;
+ case IMPLIES: output+="->"; break;
+
+ default:;
+ }
+
+}
+
+
+void parsepctlformula(pctlformula f)
+{
+	std::string output;
+	std::string result;
+	std::string command ("./ltl2ba-1.2b1/ltl2ba -f \"");
+	ltlstring(f, output);
+	command+=output;
+	command+="\"";
+	//system(command.c_str());
+	result = ssystem(command.c_str());
+	std::cout<<result;
+
+}
+
+
+automata parseautomata(std::string A)
+{
+	std::string accept = "accept_";
+	std::string state = "T0_";
+
+
+
+
+
+
+}
+
+
 
 
 
@@ -88,51 +171,20 @@ resultt checkautomata(tracet trace)
 		currentC=nextC;
 	}
 
-
+//check if traces finish in accepting states
+	for(const auto & scC: currentC)
+	{
+		if(C[scC].accepting)
+		{return FAIL;}
+	}
 
 	for(const auto & sc: current)
 	{
 		if(A[sc].accepting)
 		{return PASS;}
 	}
-		for(const auto & scC: currentC)
-	{
-		if(C[scC].accepting)
-		{return FAIL;}
-	}
 
 
-
-	/*
-	//take a step in the witness automata	
-	  for(const auto & sa: current)
-	  {
-	  	for(const auto & l: st.label)
-	  	{
-	  	std::set<unsigned> suc = A[sa].successors[l];
-	  	 next.insert(suc.begin(), suc.end());
-	  	}	
-	  }
-	  //take a step in the counterexample automata
-	  for(const auto & saC: currentC)
-	  {
-	  	for(const auto & l: st.label)
-	  	{
-	  	std::set<unsigned> sucC = C[saC].successors[l];
-	  	 nextC.insert(sucC.begin(), sucC.end());
-	  	}	
-	  }
-	current=next;
-	currentC=nextC;
-	
-	}
-/*
- 	for (const auto & w: current)
- 	{if (A[w].accepting){return PASS;}}
- 	for(const auto & c: currentC)
- 	{if (C[c].accepting){return FAIL;}}
-
-*/
 return UNKNOWN;
 }
 

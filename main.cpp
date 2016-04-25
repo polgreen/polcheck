@@ -14,21 +14,33 @@
 
 tracet gettrace(std::default_random_engine &);
 resultt checkproperty(tracet);
-unsigned N = 100;
+unsigned N = 100000; //number of traces to check
 unsigned tracelength = 20;
+
+
+void printtrace(tracet trace)
+{
+    for(const auto &s: trace) 
+    {
+        printstate(s);
+    }
+    std::cout<<"\n";
+}
 
 
 void statmodelcheck()
 {
-	std::default_random_engine generator;
-    float prob=0.5;
+  std::random_device rd;
+	std::default_random_engine generator(rd());
+  float prob=0.5;
 	unsigned n=0, p=0, f=0;
 	tracet sigma;
 	while(n<N)
 	{
 		sigma = gettrace(generator);
+
 		n = n + 1;
-		switch (checkproperty(sigma))
+		switch (checkautomata(sigma))
 		{
 			case UNKNOWN: break;
 			case PASS: p = p + 1; break;
@@ -74,20 +86,8 @@ tracet gettrace(std::default_random_engine &generator)
 	return trace;
 }
 
-void printtrace(tracet trace)
-{
-    for(const auto &s: trace) 
-    {
-        printstate(s);
 
-    }
-    std::cout<<"\n";
-}
 
-resultt checkproperty(tracet trace)
-{
-
-}
 
 
 int main(int argc, const char *argv[])
@@ -95,21 +95,11 @@ int main(int argc, const char *argv[])
   resultt res;  
   tracet trace;
   std::default_random_engine generator;
-  trace = gettrace(generator);
-  printtrace(trace); 
 
-  //system ("./ltl2ba-1.2b1/ltl2ba -f \"a U b\"");
+  statmodelcheck();
+}
 
-  res=checkautomata(trace);
-  switch(res)
-  {
-    case PASS: std::cout<<"PASS"; break;
-    case FAIL: std::cout<<"FAIL"; break;
-    case UNKNOWN: std::cout<<"UNKNOWN"; break;
-  }
-
-
-  std::vector<tokent> tokenseq;
+/*  std::vector<tokent> tokenseq;
   std::cout<< "Number of strings: "<<argc<<"\n";
     if (argc==2)
     {
@@ -121,9 +111,6 @@ int main(int argc, const char *argv[])
         output(f);
         std::cout<<"\n";
          parsepctlformula(f);
-
-      //  tracecheck(f,trace);
-
 
     }
     else
@@ -138,3 +125,16 @@ int main(int argc, const char *argv[])
 
 
 }
+
+/*  trace = gettrace(generator);
+  printtrace(trace); 
+
+
+  res=checkautomata(trace);
+  switch(res)
+  {
+    case PASS: std::cout<<"PASS"; break;
+    case FAIL: std::cout<<"FAIL"; break;
+    case UNKNOWN: std::cout<<"UNKNOWN"; break;
+  }
+*/

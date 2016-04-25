@@ -8,6 +8,7 @@
 #include <sstream>
 #include <fstream>
 #include <cstdlib>
+#include <sstream>
 
 
 std::string ssystem (const char *command) {
@@ -59,6 +60,16 @@ void ltlstring (pctlformula f, std::string& output)
 }
 
 
+void parseautomataresult(std::string A)
+{
+	std::string init = "T0_init";
+	std::string accept = "accept_";
+	std::string state = "T0_S";
+
+	//get initial state
+
+}
+
 void parsepctlformula(pctlformula f)
 {
 	std::string output;
@@ -71,23 +82,8 @@ void parsepctlformula(pctlformula f)
 	result = ssystem(command.c_str());
 	std::cout<<result;
 
-}
-
-
-automata parseautomata(std::string A)
-{
-	std::string accept = "accept_";
-	std::string state = "T0_";
-
-
-
-
-
 
 }
-
-
-
 
 
 //witness automata for Fa, where a=label 0
